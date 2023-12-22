@@ -1,4 +1,4 @@
-package com.example.model.opengiveaway
+package com.example.network.model.opengiveaway
 
 
 import kotlinx.serialization.SerialName

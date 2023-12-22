@@ -1,7 +1,7 @@
 package com.example.network
 
-import com.example.model.giveaway.Giveaway
-import com.example.model.opengiveaway.OpenGiveaway
+import com.example.network.model.giveaway.Giveaway
+import com.example.network.model.opengiveaway.OpenGiveaway
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -23,17 +23,25 @@ class KtorClient {
         }
 
         install(ContentNegotiation) {
-            json(Json{
+            json(Json {
                 ignoreUnknownKeys = true
             })
         }
     }
 
-    suspend fun getGiveawayById(): Giveaway {
-        return client.get("giveaway?id=525").body()
-    }
+    suspend fun getGiveawayById(id: Int): Giveaway = client.get("giveaway?id=$id").body()
 
-    suspend fun getOpenGiveaway(): List<OpenGiveaway> {
-        return client.get("giveaways").body()
-    }
+    suspend fun getOpenGiveaway(
+        sortBy: String?,
+        platform: String?,
+        type: String?,
+    ): List<OpenGiveaway> =
+        client.get("giveaways${buildUrlString(sortBy, platform, type)}").body()
+
+    suspend fun getFilteredGiveaways(
+        sortBy: String?,
+        platform: String?,
+        type: String?,
+    ): List<OpenGiveaway> =
+        client.get("filter${buildUrlString(sortBy, platform, type)}").body()
 }
