@@ -69,4 +69,7 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    // Coil Image remote loading
+    implementation(libs.coil)
 }

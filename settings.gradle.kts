@@ -26,4 +26,4 @@ dependencyResolutionManagement {
 rootProject.name = "GamePower"
 include(":app")
 include(":core:network")
-include(":data:home")
+include(":feature:home")
