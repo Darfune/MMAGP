@@ -13,6 +13,7 @@ import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import java.lang.Exception
 
 class KtorClient {
     private val client = HttpClient(OkHttp) {
@@ -29,19 +30,47 @@ class KtorClient {
         }
     }
 
-    suspend fun getGiveawayById(id: Int): Giveaway = client.get("giveaway?id=$id").body()
+    suspend fun getGiveawayById(id: Int): ApiOperation<Giveaway> = safeApiCall {
+        client.get("giveaway?id=$id").body()
+    }
 
     suspend fun getOpenGiveaway(
         sortBy: String?,
         platform: String?,
         type: String?,
-    ): List<OpenGiveaway> =
+    ): ApiOperation<List<OpenGiveaway>> = safeApiCall {
         client.get("giveaways${buildUrlString(sortBy, platform, type)}").body()
+    }
 
     suspend fun getFilteredGiveaways(
         sortBy: String?,
         platform: String?,
         type: String?,
-    ): List<OpenGiveaway> =
+    ): ApiOperation<List<OpenGiveaway>> = safeApiCall {
         client.get("filter${buildUrlString(sortBy, platform, type)}").body()
+    }
+
+    private inline fun <T> safeApiCall(apiCall: () -> T): ApiOperation<T> {
+        return try {
+            ApiOperation.Success(data = apiCall())
+        } catch (e: Exception) {
+            ApiOperation.Failure(e)
+        }
+    }
+}
+
+sealed interface ApiOperation<T> {
+    data class Success<T>(val data: T) : ApiOperation<T>
+    data class Failure<T>(val exception: Exception) : ApiOperation<T>
+
+    fun onSuccess(block: (T) -> Unit): ApiOperation<T> {
+        if (this is Success) block(data)
+        return this
+    }
+
+    fun onFailure(block: (Exception) -> Unit): ApiOperation<T> {
+        if (this is Failure) block(exception)
+        return this
+    }
+
 }
