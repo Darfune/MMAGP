@@ -44,6 +44,10 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    implementation(libs.activity.compose)
+    implementation(libs.ui.graphics)
+
+
     // Ktor implementation
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)

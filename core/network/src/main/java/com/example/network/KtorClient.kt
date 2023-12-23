@@ -1,7 +1,11 @@
 package com.example.network
 
-import com.example.network.model.giveaway.Giveaway
-import com.example.network.model.opengiveaway.OpenGiveaway
+import com.example.network.model.domain.giveaway.Giveaway
+import com.example.network.model.domain.opengiveaway.OpenGiveaway
+import com.example.network.model.domain.toGiveaway
+import com.example.network.model.domain.toOpenGiveaway
+import com.example.network.model.remote.giveaway.GiveawayDto
+import com.example.network.model.remote.opengiveaway.OpenGiveawayDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -13,7 +17,6 @@ import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import java.lang.Exception
 
 class KtorClient {
     private val client = HttpClient(OkHttp) {
@@ -31,7 +34,7 @@ class KtorClient {
     }
 
     suspend fun getGiveawayById(id: Int): ApiOperation<Giveaway> = safeApiCall {
-        client.get("giveaway?id=$id").body()
+        client.get("giveaway?id=$id").body<GiveawayDto>().toGiveaway()
     }
 
     suspend fun getOpenGiveaway(
@@ -39,7 +42,8 @@ class KtorClient {
         platform: String?,
         type: String?,
     ): ApiOperation<List<OpenGiveaway>> = safeApiCall {
-        client.get("giveaways${buildUrlString(sortBy, platform, type)}").body()
+        client.get("giveaways${buildUrlString(sortBy, platform, type)}")
+            .body<List<OpenGiveawayDto>>().map { it.toOpenGiveaway() }
     }
 
     suspend fun getFilteredGiveaways(
@@ -47,7 +51,8 @@ class KtorClient {
         platform: String?,
         type: String?,
     ): ApiOperation<List<OpenGiveaway>> = safeApiCall {
-        client.get("filter${buildUrlString(sortBy, platform, type)}").body()
+        client.get("filter${buildUrlString(sortBy, platform, type)}").body<List<OpenGiveawayDto>>()
+            .map { it.toOpenGiveaway() }
     }
 
     private inline fun <T> safeApiCall(apiCall: () -> T): ApiOperation<T> {

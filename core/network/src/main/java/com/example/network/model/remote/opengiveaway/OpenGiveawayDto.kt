@@ -1,11 +1,11 @@
-package com.example.network.model.giveaway
+package com.example.network.model.remote.opengiveaway
 
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Giveaway(
+data class OpenGiveawayDto(
     val description: String,
     @SerialName("end_date")
     val endDate: String,
@@ -14,6 +14,8 @@ data class Giveaway(
     val id: Int,
     val image: String,
     val instructions: String,
+    @SerialName("open_giveaway")
+    val openGiveaway: String,
     @SerialName("open_giveaway_url")
     val openGiveawayUrl: String,
     val platforms: String,

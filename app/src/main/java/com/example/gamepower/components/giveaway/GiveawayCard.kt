@@ -115,5 +115,5 @@ fun ExpirationData(color: Color) {
 
 @Composable
 fun GameTitle() {
-    Text(text = "Melvor Idle (Epic Games) Giveaway")
+    Text(text = "Melvor Idle (Epic Games) GiveawayDto")
 }
