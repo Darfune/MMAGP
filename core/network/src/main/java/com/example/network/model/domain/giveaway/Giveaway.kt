@@ -12,7 +12,7 @@ data class Giveaway (
     val openGiveawayUrl: String,
     val platforms: List<String>,
     val publishedDate: String,
-    val status: String,
+    val status: Boolean,
     val thumbnail: String,
     val title: String,
     val type: String,

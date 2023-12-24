@@ -9,7 +9,6 @@ import com.example.network.model.remote.opengiveaway.OpenGiveawayDto
 import java.util.Date
 
 
-
 fun GiveawayDto.toGiveaway(): Giveaway = Giveaway(
     description = description,
     endDate = calculateEndDate(endDate),
@@ -20,9 +19,9 @@ fun GiveawayDto.toGiveaway(): Giveaway = Giveaway(
     openGiveawayUrl = openGiveawayUrl,
     platforms = platforms.split(", "),
     publishedDate = publishedDate,
-    status = status,
+    status = convertStatus(status),
     thumbnail = thumbnail,
-    title = title,
+    title = title.split(" (")[0],
     type = type,
     users = users,
     worth = giveGamesWorth(worth)
@@ -39,13 +38,18 @@ fun OpenGiveawayDto.toOpenGiveaway(): OpenGiveaway = OpenGiveaway(
     openGiveawayUrl = openGiveawayUrl,
     platforms = platforms.split(", "),
     publishedDate = publishedDate,
-    status = status,
+    status = convertStatus(status),
     thumbnail = thumbnail,
-    title = title,
+    title = title.split(" (")[0],
     type = type,
     users = users,
     worth = giveGamesWorth(worth)
 )
+
+fun convertStatus(status: String): Boolean = when (status) {
+    "Active" -> true
+    else -> false
+}
 
 @SuppressLint("SimpleDateFormat")
 fun calculateEndDate(endDate: String): String {
@@ -53,14 +57,13 @@ fun calculateEndDate(endDate: String): String {
     // Get the current date and time
     val currentDate = Date()
     // Parse the target date string
-    val targetDateString = "2023-12-24 23:59:00"
-    val targetDate = dateFormat.parse(targetDateString)
+    val targetDate = dateFormat.parse(endDate)
     // Calculate the difference in milliseconds
     return (targetDate.time - currentDate.time).toString()
 }
 
 fun giveGamesWorth(worth: String): WorthTag {
-    return  when (worth) {
+    return when (worth) {
         "Uncommon" -> WorthTag.Uncommon
         "Rare" -> WorthTag.Rare
         "Epic" -> WorthTag.Epic

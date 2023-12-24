@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,14 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
-import com.example.gamepower.components.common.EpicIcon
 import com.example.gamepower.components.common.FreeTag
 import com.example.gamepower.components.common.GiveawayType
 import com.example.gamepower.components.common.LoadingState
+import com.example.gamepower.components.common.RarityIcon
 
 @Preview
 @Composable
@@ -60,6 +59,7 @@ fun CardContent(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         GameImage()
         GameTitle()
+        Spacer(modifier = Modifier.height(8.dp))
         GameTags()
     }
 }
@@ -72,10 +72,10 @@ fun GameTags() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         FreeTag()
-        Row{
-            GiveawayType()
+        Row {
+            GiveawayType("Game")
             Spacer(modifier = Modifier.width(2.dp))
-            EpicIcon()
+            RarityIcon("Epic", Color.Magenta)
         }
     }
 }
@@ -87,7 +87,7 @@ fun GameImage() {
             shape = RoundedCornerShape(12.dp),
             tonalElevation = 12.dp
         ) {
-            ExpirationData(Color.Gray)
+            ExpirationData(MaterialTheme.colorScheme.error)
             SubcomposeAsyncImage(
                 model = "https://www.gamerpower.com/offers/1b/6584900c10ebe.jpg",
                 contentDescription = "Game thumb",
@@ -108,12 +108,20 @@ fun ExpirationData(color: Color) {
     ) {
         Text(
             text = "End in 13 days",
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onError,
+            fontWeight = FontWeight.ExtraBold
         )
     }
 }
 
 @Composable
 fun GameTitle() {
-    Text(text = "Melvor Idle (Epic Games) GiveawayDto")
+    Text(
+        text = "Rogue Company Expensive …eapon Wrap Key Giveaway",
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.Bold,
+        maxLines = 2,
+    )
 }

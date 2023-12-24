@@ -13,67 +13,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-@Preview
+
+
 @Composable
-fun UncommonIcon() {
+fun RarityIcon(rarity: String, color: Color) {
     OutlinedCard(
-        border = BorderStroke(1.dp, Color.Green), shape = RoundedCornerShape(6.dp),
+        border = BorderStroke(1.dp, color), shape = RoundedCornerShape(6.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
         Text(
-            text = "Uncommon",
-            color = Color.Green,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-        )
-    }
-}
-
-@Preview
-@Composable
-fun RareIcon() {
-    OutlinedCard(
-        border = BorderStroke(1.dp, Color.Cyan), shape = RoundedCornerShape(6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-    ) {
-        Text(
-            text = "Rare",
-            color = Color.Cyan,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-        )
-    }
-}
-
-@Preview
-@Composable
-fun EpicIcon() {
-    OutlinedCard(
-        border = BorderStroke(1.dp, Color.Magenta),
-        shape = RoundedCornerShape(6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-    ) {
-        Text(
-            text = "Epic",
-            color = Color.Magenta,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-        )
-    }
-}
-
-@Preview
-@Composable
-fun LegendaryIcon() {
-    OutlinedCard(
-        border = BorderStroke(1.dp, Color.Yellow), shape = RoundedCornerShape(6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-    ) {
-        Text(
-            text = "Legendary",
-            color = Color.Yellow,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+            text = rarity,
+            color = color,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
@@ -88,14 +47,15 @@ fun ExpiredIcon() {
         Text(
             text = "Expired",
             color = Color.Gray,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
 
-@Preview
 @Composable
-fun GiveawayType(type: String = "Beta Access") {
+fun GiveawayType(type: String) {
     Card(
         shape = RoundedCornerShape(6.dp),
         colors = CardDefaults.cardColors(
@@ -105,7 +65,9 @@ fun GiveawayType(type: String = "Beta Access") {
     ) {
         Text(
             text = type,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
@@ -121,13 +83,17 @@ fun FreeTag(price: String? = "$2.99") {
             Text(
                 text = "FREE",
                 color = Color.Gray,
-                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
         }
         if (!price.isNullOrBlank())
             Text(
                 text = price,
                 modifier = Modifier.padding(start = 2.dp, top = 2.dp),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
                 style = TextStyle(textDecoration = TextDecoration.LineThrough)
             )
     }
