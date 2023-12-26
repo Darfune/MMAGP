@@ -1,7 +1,6 @@
 package com.example.network.model.domain.opengiveaway
 
-import com.example.network.model.domain.WorthTag
-import kotlinx.serialization.SerialName
+import com.example.network.model.domain.RarityTag
 
 data class OpenGiveaway (
     val description: String,
@@ -19,5 +18,6 @@ data class OpenGiveaway (
     val title: String,
     val type: String,
     val users: Int,
-    val worth: WorthTag
+    val worth: String,
+    val rarity: RarityTag
 )

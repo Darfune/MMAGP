@@ -1,7 +1,10 @@
 package com.example.network.model.domain.giveaway
 
-import com.example.network.model.domain.WorthTag
+import android.os.Parcelable
+import com.example.network.model.domain.RarityTag
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Giveaway (
     val description: String,
     val endDate: String,
@@ -17,5 +20,6 @@ data class Giveaway (
     val title: String,
     val type: String,
     val users: Int,
-    val worth: WorthTag
-)
+    val worth: String,
+    val rarity: RarityTag
+): Parcelable

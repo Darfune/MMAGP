@@ -24,7 +24,9 @@ fun GiveawayDto.toGiveaway(): Giveaway = Giveaway(
     title = title.split(" (")[0],
     type = type,
     users = users,
-    worth = giveGamesWorth(worth)
+    worth = worth,
+    rarity = makeRarityTag(worth, type)
+
 )
 
 fun OpenGiveawayDto.toOpenGiveaway(): OpenGiveaway = OpenGiveaway(
@@ -43,7 +45,8 @@ fun OpenGiveawayDto.toOpenGiveaway(): OpenGiveaway = OpenGiveaway(
     title = title.split(" (")[0],
     type = type,
     users = users,
-    worth = giveGamesWorth(worth)
+    worth = worth,
+    rarity = makeRarityTag(worth, type)
 )
 
 fun convertStatus(status: String): Boolean = when (status) {
@@ -59,18 +62,23 @@ fun calculateEndDate(endDate: String): String {
     // Parse the target date string
     val targetDate = dateFormat.parse(endDate)
     // Calculate the difference in milliseconds
-    return (targetDate.time - currentDate.time).toString()
+    val expiration = (targetDate.time - currentDate.time)
+    return "Ends in" + if(expiration > 1) "$expiration days" else "today"
 }
 
-fun giveGamesWorth(worth: String): WorthTag {
-    return when (worth) {
-        "Uncommon" -> WorthTag.Uncommon
-        "Rare" -> WorthTag.Rare
-        "Epic" -> WorthTag.Epic
-        "Legendary" -> WorthTag.Legendary
-        else -> {
-            WorthTag.Uncommon
-        }
+fun makeRarityTag(worth: String, type: String): RarityTag {
+    if (type == "Early Access" || worth == "N/A")
+        return RarityTag.Uncommon
+    return calculateWorth(worth)
+}
+
+fun calculateWorth(worth: String): RarityTag {
+    val rarity = worth.split("$")[1].toFloat()
+    return when  {
+        (rarity < 10.00) -> RarityTag.Rare
+        (rarity < 15.00) -> RarityTag.Epic
+        (rarity > 15.00) -> RarityTag.Legendary
+        else -> RarityTag.Uncommon
     }
 }
 
