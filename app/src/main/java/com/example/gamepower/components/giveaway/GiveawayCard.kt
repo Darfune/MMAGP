@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,17 +21,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.example.gamepower.components.common.FreeTag
 import com.example.gamepower.components.common.GiveawayType
 import com.example.gamepower.components.common.LoadingState
 import com.example.gamepower.components.common.RarityIcon
+import com.example.network.model.domain.RarityTag
+import com.example.network.model.domain.giveaway.Giveaway
 
-@Preview
+//@Preview
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GiveawayCard() {
+fun GiveawayCard(giveaway: Giveaway, onGiveawayClicked: (String) -> Unit) {
     Card(
         modifier = Modifier.padding(4.dp),
         shape = RoundedCornerShape(12.dp),
@@ -48,48 +51,49 @@ fun GiveawayCard() {
             draggedElevation = 1.dp,
             disabledElevation = 0.dp
         ),
-        border = null
+        border = null,
+        onClick = { onGiveawayClicked(giveaway.description) }
     ) {
-        CardContent(Modifier.padding(4.dp))
+        CardContent(Modifier.padding(4.dp), giveaway)
     }
 }
 
 @Composable
-fun CardContent(modifier: Modifier = Modifier) {
+fun CardContent(modifier: Modifier = Modifier, giveaway: Giveaway) {
     Column(modifier = modifier) {
-        GameImage()
-        GameTitle()
+        GameImage(giveaway.image, giveaway.endDate)
+        GameTitle(giveaway.title)
         Spacer(modifier = Modifier.height(8.dp))
-        GameTags()
+        GameTags(giveaway.worth, giveaway.type, giveaway.rarity)
     }
 }
 
 @Composable
-fun GameTags() {
+fun GameTags(worth: String, type: String, rarityTag: RarityTag) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        FreeTag()
+        FreeTag(worth)
         Row {
-            GiveawayType("Game")
+            GiveawayType(type)
             Spacer(modifier = Modifier.width(2.dp))
-            RarityIcon("Epic", Color.Magenta)
+            RarityIcon(rarityTag)
         }
     }
 }
 
 @Composable
-fun GameImage() {
+fun GameImage(gameImage: String, endDate: String) {
     Box {
         Surface(
             shape = RoundedCornerShape(12.dp),
             tonalElevation = 12.dp
         ) {
-            ExpirationData(MaterialTheme.colorScheme.error)
+            ExpirationData(endDate, MaterialTheme.colorScheme.error)
             SubcomposeAsyncImage(
-                model = "https://www.gamerpower.com/offers/1b/6584900c10ebe.jpg",
+                model = gameImage,
                 contentDescription = "Game thumb",
                 modifier = Modifier.fillMaxWidth(),
                 loading = { LoadingState() }
@@ -99,7 +103,7 @@ fun GameImage() {
 }
 
 @Composable
-fun ExpirationData(color: Color) {
+fun ExpirationData(endDate: String, color: Color) {
     Surface(
         modifier = Modifier.padding(start = 4.dp, top = 4.dp),
         tonalElevation = 12.dp,
@@ -107,7 +111,7 @@ fun ExpirationData(color: Color) {
         shape = RoundedCornerShape(12.dp)
     ) {
         Text(
-            text = "End in 13 days",
+            text = endDate,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onError,
@@ -117,9 +121,9 @@ fun ExpirationData(color: Color) {
 }
 
 @Composable
-fun GameTitle() {
+fun GameTitle(title: String) {
     Text(
-        text = "Rogue Company Expensive …eapon Wrap Key Giveaway",
+        text = title,
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold,
         maxLines = 2,

@@ -18,18 +18,18 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.example.network.model.domain.RarityTag
 
 
 @Composable
-fun RarityIcon(rarity: String, color: Color) {
+fun RarityIcon(rarity: RarityTag) {
     OutlinedCard(
-        border = BorderStroke(1.dp, color), shape = RoundedCornerShape(6.dp),
+        border = BorderStroke(1.dp, rarity.color), shape = RoundedCornerShape(6.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
         Text(
-            text = rarity,
-            color = color,
+            text = rarity.tag,
+            color = rarity.color,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold
@@ -72,9 +72,8 @@ fun GiveawayType(type: String) {
     }
 }
 
-@Preview
 @Composable
-fun FreeTag(price: String? = "$2.99") {
+fun FreeTag(price: String) {
     Row {
         OutlinedCard(
             border = BorderStroke(1.dp, Color.Gray), shape = RoundedCornerShape(6.dp),
@@ -88,7 +87,7 @@ fun FreeTag(price: String? = "$2.99") {
                 fontWeight = FontWeight.Bold
             )
         }
-        if (!price.isNullOrBlank())
+        if (price.isNotBlank())
             Text(
                 text = price,
                 modifier = Modifier.padding(start = 2.dp, top = 2.dp),

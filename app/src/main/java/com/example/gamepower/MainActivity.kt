@@ -10,17 +10,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.gamepower.screens.details.DetailsScreen
 import com.example.gamepower.screens.home.HomeScreen
 import com.example.gamepower.ui.theme.GamePowerTheme
-import com.example.network.KtorClient
+import com.example.network.model.domain.giveaway.Giveaway
 
 class MainActivity : ComponentActivity() {
 
-    private val ktorClient = KtorClient()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val navController = rememberNavController()
 
             GamePowerTheme {
                 // A surface container using the 'background' color from the theme
@@ -28,7 +34,19 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen()
+                    NavHost(navController = navController, startDestination = "home"){
+                        composable("home"){ HomeScreen(){
+                            navController.navigate("details/$it")
+                        } }
+                        composable("details/{description}"){ backStackEntry ->
+                            val description: String = backStackEntry.arguments?.getString("description") ?: ""
+                            DetailsScreen(description)
+//                            val giveaway = navController.previousBackStackEntry?.savedStateHandle?.get<Giveaway>("giveaway")
+//                            if (giveaway != null) {
+//                                DetailsScreen(giveaway)
+//                            }
+                        }
+                    }
                 }
             }
         }
