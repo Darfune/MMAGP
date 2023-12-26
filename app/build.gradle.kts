@@ -72,4 +72,7 @@ dependencies {
 
     // Coil Image remote loading
     implementation(libs.coil)
+
+    // Compose Navigation library
+    implementation(libs.navigation)
 }

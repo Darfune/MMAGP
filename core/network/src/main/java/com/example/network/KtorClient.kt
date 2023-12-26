@@ -41,18 +41,18 @@ class KtorClient {
         sortBy: String?,
         platform: String?,
         type: String?,
-    ): ApiOperation<List<OpenGiveaway>> = safeApiCall {
+    ): ApiOperation<List<Giveaway>> = safeApiCall {
         client.get("giveaways${buildUrlString(sortBy, platform, type)}")
-            .body<List<OpenGiveawayDto>>().map { it.toOpenGiveaway() }
+            .body<List<GiveawayDto>>().map { it.toGiveaway() }
     }
 
     suspend fun getFilteredGiveaways(
         sortBy: String?,
         platform: String?,
         type: String?,
-    ): ApiOperation<List<OpenGiveaway>> = safeApiCall {
-        client.get("filter${buildUrlString(sortBy, platform, type)}").body<List<OpenGiveawayDto>>()
-            .map { it.toOpenGiveaway() }
+    ): ApiOperation<List<Giveaway>> = safeApiCall {
+        client.get("filter${buildUrlString(sortBy, platform, type)}").body<List<GiveawayDto>>()
+            .map { it.toGiveaway() }
     }
 
     private inline fun <T> safeApiCall(apiCall: () -> T): ApiOperation<T> {
@@ -62,20 +62,4 @@ class KtorClient {
             ApiOperation.Failure(e)
         }
     }
-}
-
-sealed interface ApiOperation<T> {
-    data class Success<T>(val data: T) : ApiOperation<T>
-    data class Failure<T>(val exception: Exception) : ApiOperation<T>
-
-    fun onSuccess(block: (T) -> Unit): ApiOperation<T> {
-        if (this is Success) block(data)
-        return this
-    }
-
-    fun onFailure(block: (Exception) -> Unit): ApiOperation<T> {
-        if (this is Failure) block(exception)
-        return this
-    }
-
 }
